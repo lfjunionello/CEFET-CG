@@ -18,7 +18,7 @@ def f(u, v):
 
 def desenhaEsfera():
    for i in range(0,n): 
-        glBegin(GL_QUAD_STRIP)
+        glBegin(GL_TRIANGLE_STRIP)
         for j in range(0,n): 
             glColor3f(0.5+(random.random()*0.5),0.5+(random.random()*0.5),0.13+(random.random()*0.5))
             x,y,z = f(i,j)
