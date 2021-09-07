@@ -2,6 +2,7 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 import numpy as np
+import random
 
 x0 = -1
 xn = 1
@@ -18,8 +19,8 @@ def f(x,y):
     # Paraboloide Circular
     return x**2-y**2
 
-def cor(t, c1 = np.array([1,0,0]), c2 = np.array([0,0,1])):
-    return c1 + t*(c2 - c1)    
+# def cor(t, c1 = np.array([1,0,0]), c2 = np.array([0,0,1])):
+#     return c1 + t*(c2 - c1)    
 
 def desenhaSuperficie():
     y = y0
@@ -30,7 +31,7 @@ def desenhaSuperficie():
         
         for j in range(n): 
 
-            glColor3fv(cor(j/(n-1)))
+            glColor3fv(((1.0*(i+1)/(n-1)) * 0.3,0.3,(1.0*(i+1)/(n-1)) * 0.8 ))
 
             glVertex3f(x, y, f(x, y))
             glVertex3f(x, y + dy, f(x, y + dy))
