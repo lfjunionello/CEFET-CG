@@ -1,61 +1,77 @@
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
+import numpy as np
 
-import math 
-import random
+x0 = -1
+xn = 1
 
-res = 50
-r = 2
+y0 = -1
+yn = 1
 
-a = 0 
-def f1(i,j):
-    theta = (math.pi*i/(res-1))-(math.pi/2)
-    phi = 2*math.pi*j/(res-1)
-    x = r*math.cos(theta)*math.cos(phi)
-    y = r*math.sin(theta)
-    z = r*math.cos(theta)*math.sin(phi)
-    return x,y**2,z
+n = 50
+dx = (xn - x0)/n
+dy = (yn - y0)/n
 
-def paraboloid_mesh():
+
+def f(x,y):
+    # Paraboloide Circular
+    return x**2-y**2
+
+def cor(t, c1 = np.array([1,0,0]), c2 = np.array([0,0,1])):
+    return c1 + t*(c2 - c1)    
+
+def desenhaSuperficie():
+    y = y0
+    for i in range(n):
+        x = x0
+        
+        glBegin(GL_TRIANGLE_STRIP)
+        
+        for j in range(n): 
+
+            glColor3fv(cor(j/(n-1)))
+
+            glVertex3f(x, y, f(x, y))
+            glVertex3f(x, y + dy, f(x, y + dy))
+            
+            x += dx
+        
+        glEnd()
+        
+        y += dy
+
+
+a = 0
+def desenha():
+    global a
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     glPushMatrix()
-    glTranslate(0,-1,0)
-    glRotatef(a,0,0.3,0.1)
 
-    glBegin(GL_TRIANGLE_STRIP)
+    glRotatef(-a,0.5,0.5,0)
+    desenhaSuperficie()
     
-    for i in range(0,round(res/2)): 
-        for j in range(0,res): 
-            glColor3fv(((1.0*(i+1)/(res-1)) * 0.9,(random.random()/5),1 - (1.0*(i+1)/(res-1)) * 0.87 ))
-            x,y,z = f1(i,j)
-            glVertex3f(x,y,z)
-            x,y,z = f1(i+1,j)
-            glVertex3f(x,y,z)
-
-    glEnd()
     glPopMatrix()
 
-def draw():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    global a 
-    a+=1
-    paraboloid_mesh()
     glutSwapBuffers()
-  
+    a += 1
+ 
 def timer(i):
     glutPostRedisplay()
-    glutTimerFunc(10,timer,1)
+    glutTimerFunc(50,timer,1)
 
-# Main Routine
+# PROGRAMA PRINCIPAL
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE)
 glutInitWindowSize(800,600)
-glutCreateWindow("Funcao Implicita")
-glutDisplayFunc(draw)
+glutCreateWindow("Superficie")
+glutDisplayFunc(desenha)
 glEnable(GL_MULTISAMPLE)
 glEnable(GL_DEPTH_TEST)
-glClearColor(0,0,0,1)
+glClearColor(0.,0.,0.,1.)
 gluPerspective(45,800.0/600.0,0.1,100.0)
-glTranslatef(0.0,0.0,-10)
-glutTimerFunc(10,timer,1)
+glTranslatef(0.0,0.0,-5)
+glutTimerFunc(50,timer,1)
 glutMainLoop()
+
+
