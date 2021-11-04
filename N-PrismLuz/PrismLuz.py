@@ -60,7 +60,6 @@ def main():
 	glutCreateWindow("Prism")
 	init()
 	glutReshapeFunc(reshape)
-	glRotatef(1,0,90,0)
 	glutDisplayFunc(display)
 	glutTimerFunc(50,timer,1)
 	glutMainLoop()
